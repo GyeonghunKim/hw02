@@ -18,6 +18,12 @@ const bool test_add_two_container(){
     auto c = add_two_container(a, b);
     print_container(c);
     auto tmp = max(c);
-    std::cout << tmp;
+    std::cout << tmp << std::endl;
+    auto ttmp = inner_prod(a, b);
+    std::cout << ttmp<<std::endl;
 
+    std::array<double, 2> co{1, 1};
+    std::array<double, 3> x{1, 2, 3};
+    auto y = evaluate(co, x);
+    print_container(y);
 }
