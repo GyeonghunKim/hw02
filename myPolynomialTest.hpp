@@ -21,9 +21,11 @@ const bool test_add_two_container(){
     std::cout << tmp << std::endl;
     auto ttmp = inner_prod(a, b);
     std::cout << ttmp<<std::endl;
-
-    std::array<double, 2> co{1, 1};
-    std::array<double, 3> x{1, 2, 3};
+    std::array<int, 4> co{1, 1, 1, 1};
+    std::array<int, 3> x{1, 2, 3};
+    print_polynomial(co);
     auto y = evaluate(co, x);
     print_container(y);
+
+
 }

@@ -20,6 +20,18 @@ void print_container(const Container &container1){
     std::cout << "]" << std::endl;
 }
 
+// print polynomial with coefficients in input container
+// for my convince
+template <typename Container>
+void print_polynomial(const Container &container1){
+    auto length = container1.size();
+    std::cout << "P(x) = " << container1[0] << "+\t";
+    for (int i = 1; i < length - 1; ++i){
+        std::cout << container1[i] << "*x^" << i << " +\t";
+    }
+    std::cout << container1[length-1] << "*x^" << length-1 << std::endl;
+}
+
 // calculate inner product of two input containers
 // for my convince
 template <typename Container>
@@ -33,6 +45,7 @@ auto inner_prod(const Container &container1, const Container &container2){
     return inner_prod_result;
 }
 
+
 // calculate componentwise product of two container
 // for my convince
 template <typename Container>
@@ -44,6 +57,7 @@ auto componentwise_prod(const Container &container1, const Container &container2
     }
     return result_container;
 }
+
 
 template <typename Container>
 Container add_two_container(const Container &container1, const Container &container2){
@@ -65,6 +79,9 @@ auto max(const Container &container1){
     }
     return max_val;
 }
+
+
+
 template <typename Container, typename Input>
 auto evaluate(const Container &y, Input &x) -> Input{
     // order of polynomial
@@ -72,21 +89,21 @@ auto evaluate(const Container &y, Input &x) -> Input{
     // length of inputdata
     const auto length = x.size();
     // "out" is return value
-    Input out = y[0];
+    // initialize out with 0
+    Input out {0,};
 
-    /////////////
-    Note: create function which make ones
-    /////////////
     auto cur_coef = y[0];
-
+    for (int i = 0; i < length; ++i){
+        out[i] += cur_coef;
+    }
+    auto x_multiplied = x;
     for(int i = 1; i < order_plus_one; ++i){
-
-        if(i - 1){
-            x = componentwise_prod(x, x);
+        if(i != 1){
+            x_multiplied = componentwise_prod(x_multiplied, x);
             cur_coef = y[i];
         }
         for(int j = 0; j < length; ++j){
-            out[j] += cur_coef * x[j];
+            out[j] += cur_coef * x_multiplied[j];
         }
     }
     return out;
