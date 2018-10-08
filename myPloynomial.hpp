@@ -8,8 +8,18 @@
 #include <typeinfo>
 #include <type_traits>
 
+// **** List of Functions ****
+// print_container() which print components of container in [1, 2, 3, ... ] form
+// print_polynomial() which print components of container in ploynomial form.
+// inner_prod() which calculate inner product of two container
+// componentwise_prod() which multiply two container componentwise
+// max_container() which find maximum value in container
+// add_two_container() which add two container componentwise
+// evaluate() which evaluate ploynomial function which use container values as coefficients
+
 // print components in container in serial
 // for my convince
+
 template <typename Container>
 void print_container(const Container &container1){
     auto length = container1.size();
@@ -70,7 +80,7 @@ Container add_two_container(const Container &container1, const Container &contai
 }
 
 template <typename Container>
-auto max(const Container &container1){
+auto max_container(const Container &container1){
     auto length = container1.size();
     auto max_val = container1[0];
     // don't have to compare max_val with container[0] because max_val initialized with container[0]
