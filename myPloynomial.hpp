@@ -7,19 +7,24 @@
 #include <iostream>
 #include <typeinfo>
 #include <type_traits>
+#include <cmath>
+#include <vector>
+#include <array>
 
 // **** List of Functions ****
 // print_container() which print components of container in [1, 2, 3, ... ] form
 // print_polynomial() which print components of container in ploynomial form.
+// lin_vector()
+// lin_array()
 // inner_prod() which calculate inner product of two container
 // componentwise_prod() which multiply two container componentwise
 // max_container() which find maximum value in container
 // add_two_container() which add two container componentwise
 // evaluate() which evaluate ploynomial function which use container values as coefficients
 
+
 // print components in container in serial
 // for my convince
-
 template <typename Container>
 void print_container(const Container &container1){
     auto length = container1.size();
@@ -40,6 +45,27 @@ void print_polynomial(const Container &container1){
         std::cout << container1[i] << "*x^" << i << " +\t";
     }
     std::cout << container1[length-1] << "*x^" << length-1 << std::endl;
+}
+
+// generate vector with linear spaced value with start value, stop value and number of points
+template <typename T>
+std::vector<T> lin_vector(const double &start, const double &stop, const int &num_points){
+    std::vector<double> z(num_points);
+    for(int i = 0; i < num_points; ++i){
+        z[i] = start + i * (stop - start)/(num_points - 1);
+    }
+    return z;
+}
+
+// generate vector with linear spaced value with start value, stop value and number of points
+template <typename T, size_t size>
+std::array<T,size> lin_array(const double &start, const double &stop){
+    int num_points = int(size);
+    std::array<T, size> z;
+    for(int i = 0; i < num_points; ++i){
+        z[i] = start + i * (stop - start)/(num_points - 1);
+    }
+    return z;
 }
 
 // calculate inner product of two input containers
@@ -69,6 +95,11 @@ auto componentwise_prod(const Container &container1, const Container &container2
 }
 
 
+
+
+
+
+
 template <typename Container>
 Container add_two_container(const Container &container1, const Container &container2){
     auto length = container1.size();
@@ -80,6 +111,27 @@ Container add_two_container(const Container &container1, const Container &contai
 }
 
 template <typename Container>
+Container subtract_two_container(const Container &container1, const Container &container2){
+    auto length = container1.size();
+    Container subtracted_container;
+    for(int i = 0; i < length; ++i) {
+        subtracted_container[i] = container1[i] - container2[i];
+    }
+    return subtracted_container;
+}
+
+template <typename Container>
+auto L2_difference_two_container(const Container &container1, const Container &container2){
+    auto length = container1.size();
+    auto tmp_container = subtract_two_container(container1, container2);
+    return std::sqrt(inner_prod(tmp_container, tmp_container));
+}
+
+
+
+
+
+template <typename Container>
 auto max_container(const Container &container1){
     auto length = container1.size();
     auto max_val = container1[0];
@@ -89,7 +141,6 @@ auto max_container(const Container &container1){
     }
     return max_val;
 }
-
 
 
 template <typename Container, typename Input>

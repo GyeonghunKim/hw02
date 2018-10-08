@@ -11,36 +11,79 @@
 #include <vector>
 #include "myPloynomial.hpp"
 
-// headers for random functions
-#include <ctime>
-#include <random>
+#define TOL 10e-5
+#define VERBOSE true
 
-#define VERBOSE false
+// determine whether difference of two input variable is less than TOL
+template <typename T>
+bool isSame_twoContainer_L2sense_inTOL(T a, T b){
+    return (L2_difference_two_container(a, b) < TOL);
+}
 
 bool test_add_two_container_array(){
-
-}
-
-bool test_max_container_array(){
-
-}
-
-bool test_evaluate_array(){
-
+    auto a = lin_array<double, 100> (0, 99);
+    auto b = lin_array<double, 100>(0, 2 * 99);  // b = 2 * a
+    auto c_true = lin_array<double, 100>(0, 3 * 99);  // c = 3 * a
+    auto c_calc = add_two_container(a, b);
+    if(VERBOSE){
+        print_container(a);
+        print_container(b);
+        print_container(c_calc);
+        std::cout << "return  value is: "<<isSame_twoContainer_L2sense_inTOL(c_true, c_calc) << std::endl;
+    }
+    return isSame_twoContainer_L2sense_inTOL(c_true, c_calc);
 }
 
 bool test_add_two_container_vector(){
-
+    auto a = lin_vector<double> (0, 99, 100);
+    auto b = lin_vector<double> (0, 99*2, 100);  // b = 2 * a
+    auto c_true = lin_vector<double> (0, 99*3, 100);  // c = 3 * a
+    auto c_calc = add_two_container(a, b);
+    print_container(a);
+    print_container(b);
+    print_container(c_calc);
+    std::cout << isSame_twoContainer_L2sense_inTOL(c_true, c_calc) << std::endl;
+    return isSame_twoContainer_L2sense_inTOL(c_true, c_calc);
+}
+bool test_add_two_container(){
+    return test_add_two_container_vector() && test_add_two_container_array();
+}
+bool test_max_container_array(){
+    const size_t NN = 101;
+    std::array<double, NN> a {0,};
+    for(int i = 0; i < int(NN); ++i){
+        a[i] = -0.5*std::pow((i - 50),2) + 10.0;
+    }
+    if(VERBOSE){
+        print_container(a);
+        std::cout << "maximum value is" << max_container(a) << std::endl;
+    }
+    if ((max_container(a) - 100< TOL) && (-1*max_container(a) + 100 < TOL)){
+        return true;
+    }
+    return false;
 }
 
 bool test_max_container_vector(){
 
 }
 
+
+bool test_max_container(){
+    return test_max_container_array() && test_max_container_vector();
+}
+
+
+bool test_evaluate_array(){
+
+}
 bool test_evaluate_vector(){
 
 }
 
+bool test_evaluate(){
+    return test_evaluate_array() && test_evaluate_vector();
+}
 
 // function which run test and print result
 // I refer to Eric's code
@@ -63,12 +106,10 @@ bool run_test(std::function<bool(void)> func, const std::string& function_name){
 bool run_all_tests(){
     std::vector<bool> results;
     // test four functions
-    results.push_back(run_test(test_add_two_container_array, "test_add_two_container_array"));
-    results.push_back(run_test(test_max_container_array, "test_max_container_array"));
-    results.push_back(run_test(test_evaluate_array, "test_evaluate_array"));
-    results.push_back(run_test(test_add_two_container_vector, "test_add_two_container_vector"));
-    results.push_back(run_test(test_max_container_vector, "test_max_container_vector"));
-    results.push_back(run_test(test_evaluate_vector, "test_evaluate_vector"));
+    results.push_back(run_test(test_add_two_container, "test_add_two_container"));
+    results.push_back(run_test(test_max_container, "test_max_container"));
+    results.push_back(run_test(test_evaluate, "test_evaluate"));
+
 
     bool one_is_false = false;
 
