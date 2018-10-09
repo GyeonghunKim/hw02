@@ -9,12 +9,13 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <cstring>
 #include "myPloynomial.hpp"
 
 // I set TOL 10e-6 because round-off error scale of floating-point system in CPP is ~ 10e-7
 #define TOL 10e-6
 // if VERBOSE true, Many of intermediate calculation result will print
-#define VERBOSE true
+#define VERBOSE false
 
 // determine whether difference of two input variable in L2 sense is less than TOL
 template <typename T>
@@ -178,7 +179,7 @@ bool test_max_container_vector1(){
         std::cout << "maximum value is : " << max_container(a) << std::endl;
         std::cout << "***********************************************************************************************" << std::endl;
     }
-    if ((max_container(a) - 10< TOL) && (-1*max_container(a) + 10 < TOL)){
+    if (fabs(max_container(a) - 10) < TOL){
         return true;
     }
     return false;
@@ -240,7 +241,7 @@ bool test_max_container_vector2(){
         std::cout << "maximum value is : " << max_container(a) << std::endl;
         std::cout << "***********************************************************************************************" << std::endl;
     }
-    if ((max_container(a) - a.back()< TOL) && (-1*max_container(a) + a.back() < TOL)){
+    if (fabs(max_container(a) - a.back())< TOL){
         return true;
     }
     return false;
@@ -330,30 +331,42 @@ bool test_evaluate1(){
 
 
 bool test_evaluate_array2(){
-    auto a = lin_array<double, 100> (0, 99);
+    auto a1 = lin_array<double, 100> (0, 99);
+    auto a2 = lin_array<double, 100> (0, 198);
     auto x = 1.0;
-    auto y_from_evaluate = evaluate(a, x);
-    auto y_true = 99*100/2;
+    auto y1 = evaluate(a1, x);
+    auto y2 = evaluate(a2, x);
+
     if(VERBOSE) {
-        std::cout << "given polynomial is: " << std::endl;
-        print_polynomial(a);
-        std::cout << "0 + 1 + *** + 98 + 99 = " << std::endl;
-        std::cout << "from evaluate : " << y_from_evaluate << "\n" << "from summation formula : " << y_true << std::endl;
+        std::cout << "given polynomial_1 is: " << std::endl;
+        print_polynomial(a1);
+        std::cout << "given polynomial_2 is: " << std::endl;
+        print_polynomial(a2);
+        std::cout << "y1 = " << y1 << ", y2 = " << y2 << std::endl;
     }
-    return y_from_evaluate == y_true;
+    return y1 * 2 == y2;
 }
 bool test_evaluate_vector2(){
-    auto a = lin_vector<double> (0, 99, 100);
-    auto x = 1.0;
-    auto y_from_evaluate = evaluate(a, x);
-    auto y_true = 99*100/2;
+    auto double_vector = lin_vector<double> (0, 99, 100);
+    auto int_vector = lin_vector<int> (0, 99, 100);
+    double double_scalar = 3.0;
+    int int_scalar = 3.0;
+    auto double_double = evaluate(double_vector, double_scalar);
+    auto double_int = evaluate(double_vector, int_scalar);
+    auto int_double = evaluate(int_vector, double_scalar);
+    auto int_int = evaluate(int_vector, int_scalar);
+    auto check_dd = (typeid(double_double) == typeid(1.1));
+    auto check_di = (typeid(double_int) == typeid(1.1));
+    auto check_id = (typeid(int_double) == typeid(1.1));
+    auto check_ii = (typeid(int_int) == typeid(1));
     if(VERBOSE) {
-        std::cout << "given polynomial is: " << std::endl;
-        print_polynomial(a);
-        std::cout << "0 + 1 + *** + 98 + 99 = " << std::endl;
-        std::cout << "from evaluate : " << y_from_evaluate << "\n" << "from summation formula : " << y_true << std::endl;
+        if(check_dd) std::cout << "check_dd passed" << std::endl;
+        if(check_di) std::cout << "check_dd passed" << std::endl;
+        if(check_id) std::cout << "check_ passed" << std::endl;
+        if(check_ii) std::cout << "check_ii passed" << std::endl;
+
     }
-    return y_from_evaluate == y_true;
+    return check_dd * check_di * check_id * check_ii;
 }
 
 bool test_evaluate2(){
@@ -397,7 +410,7 @@ bool test_evaluate2(){
 // function which run test and print result
 // I refer to Eric's code
 // This function is same with 1st homework of TPCS2 class
-bool run_test(std::function<bool(void)> func, const std::string& function_name){
+bool run_test(const std::function<bool(void)> func, const std::string& function_name){
     bool isTrue = func();
     if (isTrue){
         std::cout << "test passed -> " << function_name << "\n";
@@ -418,12 +431,15 @@ bool run_all_tests(){
     results.push_back(run_test(test_add_two_container1, "test_add_two_container1"));
     results.push_back(run_test(test_max_container1, "test_max_container1"));
     results.push_back(run_test(test_evaluate1, "test_evaluate1"));
+    results.push_back(run_test(test_add_two_container2, "test_add_two_container2"));
+    results.push_back(run_test(test_max_container2, "test_max_container2"));
+    results.push_back(run_test(test_evaluate2, "test_evaluate2"));
 
 
     bool one_is_false = false;
 
     // print which is passed and which is failed
-    for (int i = 0; i<4; ++i){
+    for (int i = 0; i<6; ++i){
         if(!results[i]){ one_is_false = true; }
     }
     // print all test passed or some test failed

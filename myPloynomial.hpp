@@ -17,8 +17,8 @@
 // print_polynomial() which print components of container in ploynomial form.
 //
 // 2) generate linear container
-// lin_vector()
-// lin_array()
+// lin_vector() which generate vector whose value is linearly increase.
+// lin_array() which generate array whose value is linearly increase.
 //
 // 3) functions which are used in test functions
 // inner_prod() which calculate inner product of two container
@@ -60,17 +60,17 @@ void print_polynomial(const Container &container1){
 // generate vector with linear spaced value with start value, stop value and number of points
 template <typename T>
 std::vector<T> lin_vector(const double &start, const double &stop, const int &num_points){
-    std::vector<double> z(num_points);
+    std::vector<T> z(num_points);
     for(int i = 0; i < num_points; ++i){
         z[i] = start + i * (stop - start)/(num_points - 1);
     }
     return z;
 }
 
-// generate vector with linear spaced value with start value, stop value and number of points
+// generate array with linear spaced value with start value, stop value and number of points
 template <typename T, size_t size>
 std::array<T,size> lin_array(const double &start, const double &stop){
-    int num_points = int(size);
+    auto num_points = int(size);
     std::array<T, size> z;
     for(int i = 0; i < num_points; ++i){
         z[i] = start + i * (stop - start)/(num_points - 1);
@@ -188,12 +188,12 @@ auto evaluate_for_x_series(const Container &y, Input &x) -> Input{
 
 
 template <typename Container, typename Input>
-auto evaluate(const Container &y, Input x) -> Input{
+auto evaluate(const Container &y, Input x){
     // order of polynomial
     const auto order_plus_one = y.size();
     // "out" is return value
     // initialize out with 0
-    auto out = y[0];
+    decltype(y[0] * x) out = y[0];
     auto x_multiplied = x;
     for(int i = 1; i < order_plus_one; ++i){
         out += x_multiplied * y[i];
