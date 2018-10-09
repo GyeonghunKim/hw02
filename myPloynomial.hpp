@@ -25,6 +25,7 @@
 // componentwise_prod() which multiply two container componentwise
 // subtract_two_container() which subtract two container componentwise
 // L2_difference_two_container() which calculate difference between two containers in L2 sense.
+// additive_inverse_container() which return additive inverse of input container
 //
 // 4) functions which are required from homework
 // add_two_container() which add two container componentwise
@@ -119,8 +120,15 @@ auto L2_difference_two_container(const Container &container1, const Container &c
     return std::sqrt(inner_prod(tmp_container, tmp_container));
 }
 
-
-
+template <typename Container>
+auto additive_inverse_container(const Container &container1){
+    auto length = container1.size();
+    Container container2 = container1;
+    for (int i = 0; i < length; ++i){
+        container2[i] = -1 * container1[i];
+    }
+    return container2;
+}
 
 
 
