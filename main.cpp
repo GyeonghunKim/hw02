@@ -3,7 +3,8 @@
 #include "myPloynomial.hpp"
 
 int main() {
-    test_add_two_container_array();
-    test_max_container_array();
+    //test_add_two_container();
+    test_add_two_container();
+    test_max_container();
     return 0;
 }

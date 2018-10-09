@@ -26,10 +26,13 @@ bool test_add_two_container_array(){
     auto c_true = lin_array<double, 100>(0, 3 * 99);  // c = 3 * a
     auto c_calc = add_two_container(a, b);
     if(VERBOSE){
+        std::cout << "***********************************************************************************************" << std::endl;
+        std::cout << "This commment is from test_add_two_container_array()" << std::endl;
         print_container(a);
         print_container(b);
         print_container(c_calc);
-        std::cout << "return  value is: "<<isSame_twoContainer_L2sense_inTOL(c_true, c_calc) << std::endl;
+        std::cout << "return  value is: "<<isSame_twoContainer_L2sense_inTOL(c_true, c_calc) << "\n" << std::endl;
+        std::cout << "***********************************************************************************************" << std::endl;
     }
     return isSame_twoContainer_L2sense_inTOL(c_true, c_calc);
 }
@@ -39,15 +42,43 @@ bool test_add_two_container_vector(){
     auto b = lin_vector<double> (0, 99*2, 100);  // b = 2 * a
     auto c_true = lin_vector<double> (0, 99*3, 100);  // c = 3 * a
     auto c_calc = add_two_container(a, b);
-    print_container(a);
-    print_container(b);
-    print_container(c_calc);
-    std::cout << isSame_twoContainer_L2sense_inTOL(c_true, c_calc) << std::endl;
+    if(VERBOSE){
+        std::cout << "***********************************************************************************************" << std::endl;
+        std::cout << "This commment is from test_add_two_container_vector()" << std::endl;
+        print_container(a);
+        print_container(b);
+        print_container(c_calc);
+        std::cout << "return  value is: " << isSame_twoContainer_L2sense_inTOL(c_true, c_calc) << "\n" << std::endl;
+        std::cout << "***********************************************************************************************" << std::endl;
+    }
     return isSame_twoContainer_L2sense_inTOL(c_true, c_calc);
 }
+
 bool test_add_two_container(){
-    return test_add_two_container_vector() && test_add_two_container_array();
+    auto tmp1 = test_add_two_container_array();
+    auto tmp2 = test_add_two_container_vector();
+    if(VERBOSE){
+        std::cout << "***********************************************************************************************" << std::endl;
+        std::cout << "test of add_two_container() ";
+        if(tmp1){
+            std::cout << "passed";
+        }
+        else{
+            std::cout << "failed";
+        }
+        std::cout << " for array."<< "\n" << "test of add_two_container() ";
+        if(tmp2){
+            std::cout << "passed";
+        }
+        else{
+            std::cout << "failed";
+        }
+        std::cout << " for vector.\n" << std::endl;
+        std::cout << "***********************************************************************************************" << std::endl;
+    }
+    return tmp1 && tmp2;
 }
+
 bool test_max_container_array(){
     const size_t NN = 101;
     std::array<double, NN> a {0,};
@@ -55,24 +86,62 @@ bool test_max_container_array(){
         a[i] = -0.5*std::pow((i - 50),2) + 10.0;
     }
     if(VERBOSE){
+        std::cout << "***********************************************************************************************" << std::endl;
+        std::cout << "This commment is from test_max_container_array()" << std::endl;
         print_container(a);
-        std::cout << "maximum value is" << max_container(a) << std::endl;
+        std::cout << "maximum value is : " << max_container(a) << std::endl;
+        std::cout << "***********************************************************************************************" << std::endl;
     }
-    if ((max_container(a) - 100< TOL) && (-1*max_container(a) + 100 < TOL)){
+    if ((max_container(a) - 10 < TOL) && (-1*max_container(a) + 10 < TOL)){
         return true;
     }
     return false;
 }
 
 bool test_max_container_vector(){
-
+    const size_t NN = 101;
+    std::vector<double> a(NN);
+    for(int i = 0; i < int(NN); ++i){
+        a[i] = -0.5*std::pow((i - 50),2) + 10.0;
+    }
+    if(VERBOSE){
+        std::cout << "***********************************************************************************************" << std::endl;
+        std::cout << "This commment is from test_max_container_vector()" << std::endl;
+        print_container(a);
+        std::cout << "maximum value is : " << max_container(a) << std::endl;
+        std::cout << "***********************************************************************************************" << std::endl;
+    }
+    if ((max_container(a) - 10< TOL) && (-1*max_container(a) + 10 < TOL)){
+        return true;
+    }
+    return false;
 }
 
 
-bool test_max_container(){
-    return test_max_container_array() && test_max_container_vector();
+bool test_max_container() {
+    auto tmp1 = test_max_container_array();
+    auto tmp2 = test_max_container_vector();
+    if(VERBOSE){
+        std::cout << "***********************************************************************************************" << std::endl;
+        std::cout << "test of max_container() ";
+        if(tmp1){
+             std::cout << "passed";
+        }
+        else{
+            std::cout << "failed";
+        }
+        std::cout << " for array."<< "\n" << "test of max_container() ";
+        if(tmp2){
+            std::cout << "passed";
+        }
+        else{
+            std::cout << "failed";
+        }
+        std::cout << " for vector." << std::endl;
+        std::cout << "***********************************************************************************************" << std::endl;
+    }
+    return tmp1 && tmp2;
 }
-
 
 bool test_evaluate_array(){
 

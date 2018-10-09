@@ -103,9 +103,9 @@ auto componentwise_prod(const Container &container1, const Container &container2
 template <typename Container>
 Container add_two_container(const Container &container1, const Container &container2){
     auto length = container1.size();
-    Container added_container;
+    auto added_container = container1;
     for(int i = 0; i < length; ++i) {
-        added_container[i] = container1[i] + container2[i];
+        added_container[i] += container2[i];
     }
     return added_container;
 }
@@ -113,16 +113,15 @@ Container add_two_container(const Container &container1, const Container &contai
 template <typename Container>
 Container subtract_two_container(const Container &container1, const Container &container2){
     auto length = container1.size();
-    Container subtracted_container;
+    auto subtracted_container = container1;
     for(int i = 0; i < length; ++i) {
-        subtracted_container[i] = container1[i] - container2[i];
+        subtracted_container[i] -= container2[i];
     }
     return subtracted_container;
 }
 
 template <typename Container>
 auto L2_difference_two_container(const Container &container1, const Container &container2){
-    auto length = container1.size();
     auto tmp_container = subtract_two_container(container1, container2);
     return std::sqrt(inner_prod(tmp_container, tmp_container));
 }
