@@ -11,17 +11,26 @@
 #include <vector>
 #include <array>
 
-// **** List of Functions ****
+// ************************* List of Functions *********************************************************
+// 1) Print functinos
 // print_container() which print components of container in [1, 2, 3, ... ] form
 // print_polynomial() which print components of container in ploynomial form.
+//
+// 2) generate linear container
 // lin_vector()
 // lin_array()
+//
+// 3) functions which are used in test functions
 // inner_prod() which calculate inner product of two container
 // componentwise_prod() which multiply two container componentwise
-// max_container() which find maximum value in container
+// subtract_two_container() which subtract two container componentwise
+// L2_difference_two_container() which calculate difference between two containers in L2 sense.
+//
+// 4) functions which are required from homework
 // add_two_container() which add two container componentwise
+// max_container() which find maximum value in container
 // evaluate() which evaluate ploynomial function which use container values as coefficients
-
+// *****************************************************************************************************
 
 // print components in container in serial
 // for my convince
@@ -94,22 +103,6 @@ auto componentwise_prod(const Container &container1, const Container &container2
     return result_container;
 }
 
-
-
-
-
-
-
-template <typename Container>
-Container add_two_container(const Container &container1, const Container &container2){
-    auto length = container1.size();
-    auto added_container = container1;
-    for(int i = 0; i < length; ++i) {
-        added_container[i] += container2[i];
-    }
-    return added_container;
-}
-
 template <typename Container>
 Container subtract_two_container(const Container &container1, const Container &container2){
     auto length = container1.size();
@@ -130,6 +123,22 @@ auto L2_difference_two_container(const Container &container1, const Container &c
 
 
 
+
+
+
+
+template <typename Container>
+Container add_two_container(const Container &container1, const Container &container2){
+    auto length = container1.size();
+    auto added_container = container1;
+    for(int i = 0; i < length; ++i) {
+        added_container[i] += container2[i];
+    }
+    return added_container;
+}
+
+
+
 template <typename Container>
 auto max_container(const Container &container1){
     auto length = container1.size();
@@ -143,7 +152,7 @@ auto max_container(const Container &container1){
 
 
 template <typename Container, typename Input>
-auto evaluate(const Container &y, Input &x) -> Input{
+auto evaluate_for_x_series(const Container &y, Input &x) -> Input{
     // order of polynomial
     const auto order_plus_one = y.size();
     // length of inputdata
@@ -165,6 +174,22 @@ auto evaluate(const Container &y, Input &x) -> Input{
         for(int j = 0; j < length; ++j){
             out[j] += cur_coef * x_multiplied[j];
         }
+    }
+    return out;
+}
+
+
+template <typename Container, typename Input>
+auto evaluate(const Container &y, Input x) -> Input{
+    // order of polynomial
+    const auto order_plus_one = y.size();
+    // "out" is return value
+    // initialize out with 0
+    auto out = y[0];
+    auto x_multiplied = x;
+    for(int i = 1; i < order_plus_one; ++i){
+        out += x_multiplied * y[i];
+        x_multiplied *= x;
     }
     return out;
 }

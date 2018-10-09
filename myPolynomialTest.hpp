@@ -11,14 +11,19 @@
 #include <vector>
 #include "myPloynomial.hpp"
 
-#define TOL 10e-5
+// I set TOL 10e-6 because round-off error scale of floating-point system in CPP is ~ 10e-7
+#define TOL 10e-6
+// if VERBOSE true, Many of intermediate calculation result will print
 #define VERBOSE true
 
-// determine whether difference of two input variable is less than TOL
+// determine whether difference of two input variable in L2 sense is less than TOL
 template <typename T>
 bool isSame_twoContainer_L2sense_inTOL(T a, T b){
     return (L2_difference_two_container(a, b) < TOL);
 }
+
+
+
 
 bool test_add_two_container_array(){
     auto a = lin_array<double, 100> (0, 99);
@@ -144,14 +149,51 @@ bool test_max_container() {
 }
 
 bool test_evaluate_array(){
-
+    auto a = lin_array<double, 100> (0, 99);
+    auto x = 1.0;
+    auto y_from_evaluate = evaluate(a, x);
+    auto y_true = 99*100/2;
+    if(VERBOSE) {
+        std::cout << "0 + 1 + *** + 98 + 99 = " << std::endl;
+        std::cout << "from evaluate : " << y_from_evaluate << "\n" << "from summation formula : " << y_true << std::endl;
+    }
+    return y_from_evaluate == y_true;
 }
 bool test_evaluate_vector(){
-
+    auto a = lin_vector<double> (0, 99, 100);
+    auto x = 1.0;
+    auto y_from_evaluate = evaluate(a, x);
+    auto y_true = 99*100/2;
+    if(VERBOSE) {
+        std::cout << "0 + 1 + *** + 98 + 99 = " << std::endl;
+        std::cout << "from evaluate : " << y_from_evaluate << "\n" << "from summation formula : " << y_true << std::endl;
+    }
+    return y_from_evaluate == y_true;
 }
 
 bool test_evaluate(){
-    return test_evaluate_array() && test_evaluate_vector();
+    auto tmp1 = test_evaluate_array();
+    auto tmp2 = test_evaluate_vector();
+    if(VERBOSE){
+        std::cout << "***********************************************************************************************" << std::endl;
+        std::cout << "test of test_evaluate() ";
+        if(tmp1){
+            std::cout << "passed";
+        }
+        else{
+            std::cout << "failed";
+        }
+        std::cout << " for array."<< "\n" << "test of test_evaluate() ";
+        if(tmp2){
+            std::cout << "passed";
+        }
+        else{
+            std::cout << "failed";
+        }
+        std::cout << " for vector." << std::endl;
+        std::cout << "***********************************************************************************************" << std::endl;
+    }
+    return tmp1 && tmp2;
 }
 
 // function which run test and print result
