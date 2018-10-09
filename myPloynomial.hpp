@@ -93,7 +93,7 @@ auto inner_prod(const Container &container1, const Container &container2){
 
 
 // calculate componentwise product of two container
-// for my convince
+// for example, componentwise_prod([1, 2, 3], [4, 5, 6]) = [1*4, 2*5, 3*6]
 template <typename Container>
 auto componentwise_prod(const Container &container1, const Container &container2){
     auto length = container1.size();
@@ -104,6 +104,7 @@ auto componentwise_prod(const Container &container1, const Container &container2
     return result_container;
 }
 
+// return componentwise subtract of two container
 template <typename Container>
 Container subtract_two_container(const Container &container1, const Container &container2){
     auto length = container1.size();
@@ -114,12 +115,15 @@ Container subtract_two_container(const Container &container1, const Container &c
     return subtracted_container;
 }
 
+// Calculate difference of two container in L2 sense.
+// Informations for L2 norm: http://mathworld.wolfram.com/L2-Norm.html
 template <typename Container>
 auto L2_difference_two_container(const Container &container1, const Container &container2){
     auto tmp_container = subtract_two_container(container1, container2);
     return std::sqrt(inner_prod(tmp_container, tmp_container));
 }
 
+// return additive_inverse of container. (I dealt container as element of some "well defined" vector space)
 template <typename Container>
 auto additive_inverse_container(const Container &container1){
     auto length = container1.size();
@@ -130,11 +134,7 @@ auto additive_inverse_container(const Container &container1){
     return container2;
 }
 
-
-
-
-
-
+// calculate addition of two container componentwise.
 template <typename Container>
 Container add_two_container(const Container &container1, const Container &container2){
     auto length = container1.size();
@@ -146,7 +146,7 @@ Container add_two_container(const Container &container1, const Container &contai
 }
 
 
-
+// return maximum value of container.
 template <typename Container>
 auto max_container(const Container &container1){
     auto length = container1.size();
@@ -158,43 +158,18 @@ auto max_container(const Container &container1){
     return max_val;
 }
 
-
-template <typename Container, typename Input>
-auto evaluate_for_x_series(const Container &y, Input &x) -> Input{
-    // order of polynomial
-    const auto order_plus_one = y.size();
-    // length of inputdata
-    const auto length = x.size();
-    // "out" is return value
-    // initialize out with 0
-    Input out {0,};
-
-    auto cur_coef = y[0];
-    for (int i = 0; i < length; ++i){
-        out[i] += cur_coef;
-    }
-    auto x_multiplied = x;
-    for(int i = 1; i < order_plus_one; ++i){
-        if(i != 1){
-            x_multiplied = componentwise_prod(x_multiplied, x);
-            cur_coef = y[i];
-        }
-        for(int j = 0; j < length; ++j){
-            out[j] += cur_coef * x_multiplied[j];
-        }
-    }
-    return out;
-}
-
-
+// evaluate value of polynomial whose coefficients are in container y and x value is x.
 template <typename Container, typename Input>
 auto evaluate(const Container &y, Input x){
-    // order of polynomial
+    // order+1 of polynomial is size of y
     const auto order_plus_one = y.size();
     // "out" is return value
-    // initialize out with 0
+    // return type should be type of y[0] * x
+    // initialize "out" with y[0] (constant term)
     decltype(y[0] * x) out = y[0];
     auto x_multiplied = x;
+    // By introducing multiplied_x, I don't have to calculate N times of multiplication to calculate x^(N+1)
+    // O(N^2) => O(N)
     for(int i = 1; i < order_plus_one; ++i){
         out += x_multiplied * y[i];
         x_multiplied *= x;

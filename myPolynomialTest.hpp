@@ -17,17 +17,21 @@
 // if VERBOSE true, Many of intermediate calculation result will print
 #define VERBOSE false
 
-// determine whether difference of two input variable in L2 sense is less than TOL
+// check whether difference of two input variable in L2 sense is less than TOL or not.
 template <typename T>
 bool isSame_twoContainer_L2sense_inTOL(T a, T b){
     return (L2_difference_two_container(a, b) < TOL);
 }
 
+// test_add_two_container1 test sum of a container and doubled container is same with trebled container.
 
+// do test_add_two_container1 for array type.
 bool test_add_two_container_array1(){
+    // create a array and doubled array and trebled array.
     auto a = lin_array<double, 100> (0, 99);
     auto b = lin_array<double, 100>(0, 2 * 99);  // b = 2 * a
     auto c_true = lin_array<double, 100>(0, 3 * 99);  // c = 3 * a
+    // calculate a + b
     auto c_calc = add_two_container(a, b);
     if(VERBOSE){
         std::cout << "***********************************************************************************************" << std::endl;
@@ -41,10 +45,13 @@ bool test_add_two_container_array1(){
     return isSame_twoContainer_L2sense_inTOL(c_true, c_calc);
 }
 
+// do test_add_two_container1 for vector type.
 bool test_add_two_container_vector1(){
+    // create a vector and doubled vector and trebled vector.
     auto a = lin_vector<double> (0, 99, 100);
     auto b = lin_vector<double> (0, 99*2, 100);  // b = 2 * a
     auto c_true = lin_vector<double> (0, 99*3, 100);  // c = 3 * a
+    // calculate a + b
     auto c_calc = add_two_container(a, b);
     if(VERBOSE){
         std::cout << "***********************************************************************************************" << std::endl;
@@ -58,6 +65,7 @@ bool test_add_two_container_vector1(){
     return isSame_twoContainer_L2sense_inTOL(c_true, c_calc);
 }
 
+// check add_two_container passed test1 for vector and array type input
 bool test_add_two_container1(){
     auto tmp1 = test_add_two_container_array1();
     auto tmp2 = test_add_two_container_vector1();
@@ -83,8 +91,9 @@ bool test_add_two_container1(){
     return tmp1 && tmp2;
 }
 
+// test_add_two_container2 check sum of a container and its additive inverse is 0
 
-
+// do test_add_two_container2 for array type.
 bool test_add_two_container_array2(){
     auto a = lin_array<double, 100> (0, 99);
     auto b = additive_inverse_container(a); // b = -a
@@ -102,6 +111,7 @@ bool test_add_two_container_array2(){
     return isSame_twoContainer_L2sense_inTOL(c, zeros);
 }
 
+// do test_add_two_container2 for vector type.
 bool test_add_two_container_vector2(){
     auto a = lin_vector<double> (0, 99, 100);
     auto b = additive_inverse_container(a); // b = -a
@@ -119,6 +129,7 @@ bool test_add_two_container_vector2(){
     return isSame_twoContainer_L2sense_inTOL(c, zeros);
 }
 
+// check add_two_container passed test1 for vector and array type input
 bool test_add_two_container2(){
     auto tmp1 = test_add_two_container_array2();
     auto tmp2 = test_add_two_container_vector2();
@@ -141,12 +152,14 @@ bool test_add_two_container2(){
         std::cout << " for vector.\n" << std::endl;
         std::cout << "***********************************************************************************************" << std::endl;
     }
+
     return tmp1 && tmp2;
 }
 
 
 
-
+// test_max_container1 check maximum value of quadratic function (a[i] = -0.5*std::pow((i - 50),2) + 10.0) is 10.0
+// do test_max_container1 for array type.
 bool test_max_container_array1(){
     const size_t NN = 101;
     std::array<double, NN> a {0,};
@@ -160,12 +173,13 @@ bool test_max_container_array1(){
         std::cout << "maximum value is : " << max_container(a) << std::endl;
         std::cout << "***********************************************************************************************" << std::endl;
     }
-    if ((max_container(a) - 10 < TOL) && (-1*max_container(a) + 10 < TOL)){
+    if (fabs(max_container(a) - 10) < TOL){
         return true;
     }
     return false;
 }
 
+// do test_max_container1 for vector type.
 bool test_max_container_vector1(){
     const size_t NN = 101;
     std::vector<double> a(NN);
@@ -185,7 +199,7 @@ bool test_max_container_vector1(){
     return false;
 }
 
-
+// check max_container passed test1 for vector and array type input
 bool test_max_container1() {
     auto tmp1 = test_max_container_array1();
     auto tmp2 = test_max_container_vector1();
@@ -213,8 +227,8 @@ bool test_max_container1() {
 
 
 
-
-
+// test_max_container_array2 check maximum value container whose elements are linearly increasing is its last value
+// do test_max_container_array2 for array type.
 bool test_max_container_array2(){
     auto a = lin_array<double, 100>(1, 100);
     if(VERBOSE){
@@ -225,12 +239,13 @@ bool test_max_container_array2(){
         std::cout << "maximum value is : " << max_container(a) << std::endl;
         std::cout << "***********************************************************************************************" << std::endl;
     }
-    if ((max_container(a) - a.back() < TOL) && (-1*max_container(a) + a.back() < TOL)){
+    if (fabs(max_container(a) - a.back()) < TOL){
         return true;
     }
     return false;
 }
 
+// do test_max_container_array2 for vector type.
 bool test_max_container_vector2(){
     auto a = lin_vector<double>(1, 100, 100);
     if(VERBOSE){
@@ -247,7 +262,7 @@ bool test_max_container_vector2(){
     return false;
 }
 
-
+// check add_two_container passed test2 for vector and array type input
 bool test_max_container2() {
     auto tmp1 = test_max_container_array2();
     auto tmp2 = test_max_container_vector2();
@@ -274,8 +289,8 @@ bool test_max_container2() {
 }
 
 
-
-
+// test_evaluate_array1 check the value of P(1) is 99*100/2 where P(x) = 0 + 1*x + 2*x^2 + ... + 99*x^99
+// do test_evaluate_array1 for array type.
 bool test_evaluate_array1(){
     auto a = lin_array<double, 100> (0, 99);
     auto x = 1.0;
@@ -289,6 +304,7 @@ bool test_evaluate_array1(){
     }
     return y_from_evaluate == y_true;
 }
+// do test_evaluate_array1 for vector type.
 bool test_evaluate_vector1(){
     auto a = lin_vector<double> (0, 99, 100);
     auto x = 1.0;
@@ -303,6 +319,7 @@ bool test_evaluate_vector1(){
     return y_from_evaluate == y_true;
 }
 
+// check evaluate() passed test1 for vector and array type input
 bool test_evaluate1(){
     auto tmp1 = test_evaluate_array1();
     auto tmp2 = test_evaluate_vector1();
@@ -328,8 +345,12 @@ bool test_evaluate1(){
     return tmp1 && tmp2;
 }
 
+// test_evaluate_array2 check return type.
+// When coefficients are double type, whether input is int or double, return type should double.
+// When coefficients are int type, if input type is double return type should be double
+// and if input type is int then, return type should be int
 
-
+// do test_evaluate_array2 for array type.
 bool test_evaluate_array2(){
     auto a1 = lin_array<double, 100> (0, 99);
     auto a2 = lin_array<double, 100> (0, 198);
@@ -346,6 +367,7 @@ bool test_evaluate_array2(){
     }
     return y1 * 2 == y2;
 }
+//do test_evaluate_array2 for vector type.
 bool test_evaluate_vector2(){
     auto double_vector = lin_vector<double> (0, 99, 100);
     auto int_vector = lin_vector<int> (0, 99, 100);
@@ -369,6 +391,7 @@ bool test_evaluate_vector2(){
     return check_dd * check_di * check_id * check_ii;
 }
 
+// check evaluate() passed test2 for vector and array type input
 bool test_evaluate2(){
     auto tmp1 = test_evaluate_array2();
     auto tmp2 = test_evaluate_vector2();
@@ -396,21 +419,10 @@ bool test_evaluate2(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // function which run test and print result
 // I refer to Eric's code
 // This function is same with 1st homework of TPCS2 class
-bool run_test(const std::function<bool(void)> func, const std::string& function_name){
+bool run_test(std::function<bool(void)> func, const std::string& function_name){
     bool isTrue = func();
     if (isTrue){
         std::cout << "test passed -> " << function_name << "\n";
@@ -420,6 +432,7 @@ bool run_test(const std::function<bool(void)> func, const std::string& function_
     }
     return isTrue;
 }
+
 
 // function which run all 4 tests and print result
 // I refer to Eric's code
